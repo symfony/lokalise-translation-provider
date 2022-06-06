@@ -30,7 +30,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 final class LokaliseProvider implements ProviderInterface
 {
-    private const LOKALISE_GET_KEYS_LIMIT = 5000;
+    private const LOKALISE_GET_KEYS_LIMIT = 500;
 
     private HttpClientInterface $client;
     private LoaderInterface $loader;
@@ -141,7 +141,7 @@ final class LokaliseProvider implements ProviderInterface
      */
     private function exportFiles(array $locales, array $domains): array
     {
-        $response = $this->client->request('POST', 'files/export', [
+        $response = $this->client->request('POST', 'files/download', [
             'json' => [
                 'format' => 'symfony_xliff',
                 'original_filenames' => true,
