@@ -670,7 +670,7 @@ class LokaliseProviderTest extends ProviderTestCase
             }, []),
         ]);
 
-        $loader = $this->getLoader();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader->expects($this->exactly(\count($consecutiveLoadArguments)))
             ->method('load')
             ->willReturnCallback(function (...$args) use (&$consecutiveLoadArguments, &$consecutiveLoadReturns) {
