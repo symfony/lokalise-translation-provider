@@ -237,7 +237,7 @@ final class LokaliseProvider implements ProviderInterface
 
             return $this->getZipContents($extractPath);
         } finally {
-            if (is_resource($h)) {
+            if (\is_resource($h)) {
                 fclose($h);
             }
             @unlink($zipFile);
