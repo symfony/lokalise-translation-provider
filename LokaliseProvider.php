@@ -166,7 +166,7 @@ final class LokaliseProvider implements ProviderInterface
         }
 
         // Lokalise returns languages with "-" separator, we need to reformat them to "_" separator.
-        $reformattedLanguages = array_map(function ($language) {
+        $reformattedLanguages = array_map(static function ($language) {
             return str_replace('-', '_', $language);
         }, array_keys($responseContent['files']));
 
