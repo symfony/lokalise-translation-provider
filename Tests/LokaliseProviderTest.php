@@ -652,8 +652,8 @@ class LokaliseProviderTest extends ProviderTestCase
         $consecutiveLoadArguments = [];
         $consecutiveLoadReturns = [];
         $response = new JsonMockResponse([
-            'files' => array_reduce($locales, function ($carry, $locale) use ($domains, $responseContents, &$consecutiveLoadArguments, &$consecutiveLoadReturns) {
-                $carry[$locale] = array_reduce($domains, function ($carry, $domain) use ($locale, $responseContents, &$consecutiveLoadArguments, &$consecutiveLoadReturns) {
+            'files' => array_reduce($locales, static function ($carry, $locale) use ($domains, $responseContents, &$consecutiveLoadArguments, &$consecutiveLoadReturns) {
+                $carry[$locale] = array_reduce($domains, static function ($carry, $domain) use ($locale, $responseContents, &$consecutiveLoadArguments, &$consecutiveLoadReturns) {
                     $carry[$domain.'.xliff'] = [
                         'content' => $responseContents[$locale][$domain],
                     ];
@@ -699,18 +699,18 @@ class LokaliseProviderTest extends ProviderTestCase
     public function testReadWithExportAsync()
     {
         $zipLocation = __DIR__.\DIRECTORY_SEPARATOR.'Fixtures'.\DIRECTORY_SEPARATOR.'Symfony-locale.zip';
-        $firstResponse = function (): ResponseInterface {
+        $firstResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['error' => ['code' => 413, 'message' => 'test']],
                 ['http_code' => 406],
             );
         };
-        $secondResponse = function (): ResponseInterface {
+        $secondResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['process_id' => 123],
             );
         };
-        $thirdResponse = function (): ResponseInterface {
+        $thirdResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['process' => ['status' => 'finished', 'details' => ['download_url' => 'https://api.lokalise.com/Symfony-locale.zip']]],
             );
@@ -759,18 +759,18 @@ class LokaliseProviderTest extends ProviderTestCase
     #[RequiresPhpExtension('zip')]
     public function testReadWithExportAsyncFailedProcess()
     {
-        $firstResponse = function (): ResponseInterface {
+        $firstResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['error' => ['code' => 413, 'message' => 'test']],
                 ['http_code' => 406],
             );
         };
-        $secondResponse = function (): ResponseInterface {
+        $secondResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['process_id' => 123],
             );
         };
-        $thirdResponse = function (): ResponseInterface {
+        $thirdResponse = static function (): ResponseInterface {
             return new JsonMockResponse(
                 ['process' => ['status' => 'failed']],
             );
