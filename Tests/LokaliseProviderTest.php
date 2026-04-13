@@ -699,22 +699,16 @@ class LokaliseProviderTest extends ProviderTestCase
     public function testReadWithExportAsync()
     {
         $zipLocation = __DIR__.\DIRECTORY_SEPARATOR.'Fixtures'.\DIRECTORY_SEPARATOR.'Symfony-locale.zip';
-        $firstResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['error' => ['code' => 413, 'message' => 'test']],
-                ['http_code' => 406],
-            );
-        };
-        $secondResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['process_id' => 123],
-            );
-        };
-        $thirdResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['process' => ['status' => 'finished', 'details' => ['download_url' => 'https://api.lokalise.com/Symfony-locale.zip']]],
-            );
-        };
+        $firstResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['error' => ['code' => 413, 'message' => 'test']],
+            ['http_code' => 406],
+        );
+        $secondResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['process_id' => 123],
+        );
+        $thirdResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['process' => ['status' => 'finished', 'details' => ['download_url' => 'https://api.lokalise.com/Symfony-locale.zip']]],
+        );
         $fourResponse = function (string $method, string $url, array $options = []) use ($zipLocation): ResponseInterface {
             $this->assertSame('GET', $method);
             $this->assertSame('https://api.lokalise.com/Symfony-locale.zip', $url);
@@ -759,22 +753,16 @@ class LokaliseProviderTest extends ProviderTestCase
     #[RequiresPhpExtension('zip')]
     public function testReadWithExportAsyncFailedProcess()
     {
-        $firstResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['error' => ['code' => 413, 'message' => 'test']],
-                ['http_code' => 406],
-            );
-        };
-        $secondResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['process_id' => 123],
-            );
-        };
-        $thirdResponse = static function (): ResponseInterface {
-            return new JsonMockResponse(
-                ['process' => ['status' => 'failed']],
-            );
-        };
+        $firstResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['error' => ['code' => 413, 'message' => 'test']],
+            ['http_code' => 406],
+        );
+        $secondResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['process_id' => 123],
+        );
+        $thirdResponse = static fn (): ResponseInterface => new JsonMockResponse(
+            ['process' => ['status' => 'failed']],
+        );
 
         $provider = self::createProvider((new MockHttpClient([$firstResponse, $secondResponse, $thirdResponse]))->withOptions([
             'base_uri' => 'https://api.lokalise.com/api2/projects/PROJECT_ID/',
